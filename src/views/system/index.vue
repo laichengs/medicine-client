@@ -13,6 +13,7 @@
   </div>
 </template>
 <script>
+import { setVisitedDate } from '../../api/record'
 import { formatDateTime, getTodayStart } from '@/utils/util'
 export default {
   data() {
@@ -27,8 +28,19 @@ export default {
     this.init()
   },
   methods: {
-    onSubmit() {
-      console.log(this.form)
+    async onSubmit() {
+      const str = this.date
+        .filter((v) => this.form.date.includes(v.date))
+        .map((v) => v.timeStamp)
+        .join(',')
+      const result = await setVisitedDate({ date: str })
+      if (result) {
+        this.$message({
+          message: '设置成功',
+          type: 'success',
+        })
+        this.form.date = []
+      }
     },
     init() {
       let date = []

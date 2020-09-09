@@ -31,3 +31,9 @@ export function getMoney(params) {
     params
   });
 }
+export function setVisitedDate(params) {
+  return request({
+    url: "/set_visited",
+    params
+  });
+}

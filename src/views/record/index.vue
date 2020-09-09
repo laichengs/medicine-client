@@ -77,8 +77,9 @@
       <el-table-column align="center" prop="serialNo" label="编号" width="120"></el-table-column>
       <el-table-column align="center" prop="name" label="姓名" width="60"></el-table-column>
       <el-table-column align="center" prop="phone" label="手机" width="100"></el-table-column>
-      <el-table-column align="center" prop="orderDate" label="日期" width="100"></el-table-column>
-      <el-table-column align="center" prop="time" label="时间" width="100"></el-table-column>
+      <el-table-column align="center" prop="orderDate" label="日期" width="90"></el-table-column>
+      <el-table-column align="center" prop="doctor" label="医生" width="60"></el-table-column>
+      <el-table-column align="center" prop="time" label="时间" width="90"></el-table-column>
       <el-table-column align="center" prop="amount" label="金额" width="50"></el-table-column>
       <el-table-column align="center" prop="createTime" label="下单时间" width="140"></el-table-column>
       <el-table-column align="center" prop="des" label="病例简述"></el-table-column>
