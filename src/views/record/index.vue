@@ -10,8 +10,8 @@
         @keyup.enter.native="handleFilter"
       />
       <el-select
-        style="margin-left:10px;width: 150px;"
         v-model="listQuery.status"
+        style="margin-left:10px;width: 150px;"
         size="small"
         filterable
         placeholder="请选择状态"
@@ -21,8 +21,8 @@
         <el-option v-for="item in statusList" :key="item.id" :label="item.title" :value="item.id" />
       </el-select>
       <el-select
-        style="margin-left:10px;width: 150px;"
         v-model="listQuery.doctorId"
+        style="margin-left:10px;width: 150px;"
         size="small"
         filterable
         placeholder="请选择医生"
@@ -32,8 +32,8 @@
         <el-option v-for="item in doctors" :key="item.id" :label="item.name" :value="item.id" />
       </el-select>
       <el-date-picker
-        style="margin-left:10px;width: 150px;"
         v-model="listQuery.date"
+        style="margin-left:10px;width: 150px;"
         value-format="timestamp"
         size="small"
         type="date"
@@ -61,7 +61,7 @@
       >查询</el-button>
       <el-button size="small" class="filter-item" icon="el-icon-refresh" @click="resetFilter">重置</el-button>
     </div>
-    <el-table :data="tableData" size="small" border v-loading="loading" style="width: 100%">
+    <el-table v-loading="loading" :data="tableData" size="small" border style="width: 100%">
       <el-table-column
         header-cell-class-name="head"
         highlight-current-row
@@ -74,32 +74,32 @@
           <span>{{ scope.$index + (listQuery.page-1)*listQuery.limit + 1 }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="serialNo" label="编号" width="120"></el-table-column>
-      <el-table-column align="center" prop="name" label="姓名" width="60"></el-table-column>
-      <el-table-column align="center" prop="phone" label="手机" width="100"></el-table-column>
-      <el-table-column align="center" prop="orderDate" label="日期" width="90"></el-table-column>
-      <el-table-column align="center" prop="doctor" label="医生" width="60"></el-table-column>
-      <el-table-column align="center" prop="time" label="时间" width="90"></el-table-column>
-      <el-table-column align="center" prop="amount" label="金额" width="50"></el-table-column>
-      <el-table-column align="center" prop="createTime" label="下单时间" width="140"></el-table-column>
-      <el-table-column align="center" prop="des" label="病例简述"></el-table-column>
+      <el-table-column align="center" prop="serialNo" label="编号" width="120" />
+      <el-table-column align="center" prop="name" label="姓名" width="60" />
+      <el-table-column align="center" prop="phone" label="手机" width="100" />
+      <el-table-column align="center" prop="orderDate" label="日期" width="90" />
+      <el-table-column align="center" prop="doctor" label="医生" width="60" />
+      <el-table-column align="center" prop="time" label="时间" width="90" />
+      <el-table-column align="center" prop="amount" label="金额" width="50" />
+      <el-table-column align="center" prop="createTime" label="下单时间" width="140" />
+      <el-table-column align="center" prop="des" label="病例简述" />
       <el-table-column align="center" prop="statusTitle" label="状态" width="100">
         <template slot-scope="scope">
-          <el-tag :type="colors[scope.row.status]">{{scope.row.statusTitle}}</el-tag>
+          <el-tag :type="colors[scope.row.status]">{{ scope.row.statusTitle }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" prop="referrer" width="200">
         <template slot-scope="scope">
           <el-button
+            v-if="scope.row.status==2"
             size="mini"
             type="primary"
-            v-if="scope.row.status==2"
-            @click="showAddBox(scope.row.id, scope.row.customer_type_id)"
+            @click="updateOrderStatus(scope.row.serialNo,6)"
           >未报到</el-button>
           <el-button
-            size="mini"
             v-if="scope.row.status==2"
-            @click="showAddBox(scope.row.id, scope.row.customer_type_id)"
+            size="mini"
+            @click="updateOrderStatus(scope.row.serialNo,5)"
           >就诊</el-button>
         </template>
       </el-table-column>
@@ -114,7 +114,7 @@
   </div>
 </template>
 <script>
-import { getRecords } from '../../api/record'
+import { getRecords, updateOrder } from '../../api/record'
 import { getDoctors, getStatus, getTimes } from '../../api/common'
 import Pagination from '@/components/Pagination'
 export default {
@@ -124,14 +124,14 @@ export default {
       colors: ['primary', 'success', 'danger', 'info', 'warning'],
       listQuery: {
         page: 1,
-        limit: 8,
+        limit: 8
       },
       loading: true,
       statusList: [],
       times: [],
       tableData: [],
       doctors: [],
-      total: 0,
+      total: 0
     }
   },
   mounted() {
@@ -157,17 +157,27 @@ export default {
       this.tableData = result.content
       this.total = result.total
     },
+    async updateOrderStatus(serialNo, status) {
+      const result = await updateOrder({ serialNo, status })
+      if (result) {
+        this.$message({
+          message: '修改成功',
+          type: 'success'
+        })
+        this.init()
+      }
+    },
     handleFilter() {
       this.init()
     },
     resetFilter() {
       this.listQuery = {
         page: 1,
-        limit: 8,
+        limit: 8
       }
       this.init()
-    },
-  },
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
