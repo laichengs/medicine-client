@@ -14,7 +14,7 @@
   </div>
 </template>
 <script>
-import { setVisitedDate } from '../../api/record'
+import { getMasterVisitedDate, setVisitedDate } from '../../api/record'
 import { formatDateTime, getTodayStart } from '@/utils/util'
 export default {
   data() {
@@ -55,17 +55,14 @@ export default {
         this.form.date = []
       }
     },
-    init() {
-      const date = []
-      const today = getTodayStart()
-      for (let i = 0; i < 7; i++) {
-        const time = today + i * 24 * 3600
-        date.push({
-          timeStamp: time,
-          date: formatDateTime(time * 1000).substring(5)
-        })
-      }
-      this.date = date
+    async init() {
+      const result = await getMasterVisitedDate()
+      const dates = result.split(',').map(v => {
+        return new Date(v * 1000)
+      })
+      const tmp = this.attrs[0]
+      tmp.dates = dates
+      this.$set(this.attrs, 0, tmp)
     },
     change(e) {
       const arr = this.attrs[0]

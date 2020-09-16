@@ -43,3 +43,9 @@ export function updateOrder(params) {
     params
   })
 }
+export function getMasterVisitedDate(params) {
+  return request({
+    url: '/master/dates',
+    params
+  })
+}
